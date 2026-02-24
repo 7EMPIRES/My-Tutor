@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-primary: #e11d48; /* Red-600 */
+  --color-accent: #000000;  /* Black */
+}
+
+@layer base {
+  .markdown-body {
+    @apply text-slate-800 leading-relaxed;
+  }
+  .markdown-body h1 {
+    @apply text-3xl font-bold mb-6 mt-8 text-black;
+  }
+  .markdown-body h2 {
+    @apply text-2xl font-bold mb-4 mt-8 text-black border-b border-red-100 pb-2;
+  }
+  .markdown-body h3 {
+    @apply text-xl font-bold mb-3 mt-6 text-black;
+  }
+  .markdown-body p {
+    @apply mb-4;
+  }
+  .markdown-body ul, .markdown-body ol {
+    @apply mb-4 ml-6;
+  }
+  .markdown-body ul {
+    @apply list-disc;
+  }
+  .markdown-body ol {
+    @apply list-decimal;
+  }
+  .markdown-body li {
+    @apply mb-2;
+  }
+  .markdown-body strong {
+    @apply font-bold text-black;
+  }
+  .markdown-body blockquote {
+    @apply border-l-4 border-red-500 pl-4 italic my-6 text-slate-600 bg-red-50 py-2;
+  }
+  .markdown-body code {
+    @apply bg-slate-100 px-1.5 py-0.5 rounded text-sm font-mono text-red-600;
+  }
+  .markdown-body pre {
+    @apply bg-black text-white p-4 rounded-xl overflow-x-auto my-6 font-mono text-sm;
+  }
+}
