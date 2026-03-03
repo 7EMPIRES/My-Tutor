@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>7EMPIRES DRC EXHAUSTIVE TUTOR</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#000000">
+    <link rel="apple-touch-icon" href="https://picsum.photos/seed/ai-tutor/192/192">
+    <!-- Preconnect to CDNs for faster loading -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        
+        :root {
+            --red-primary: #dc2626;
+            --bg-primary: #ffffff;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: contain;
+        }
+
+        /* Splash Screen */
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            background: white;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loader-ring {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--red-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .markdown-body h2 { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; }
+        .markdown-body p { margin-bottom: 1rem; line-height: 1.6; }
+        .markdown-body strong { font-weight: 700; color: #000; }
+        .markdown-body ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 640px) {
+            .nav-btn { padding: 0.75rem 1rem; font-size: 0.875rem; }
+            header h1 { font-size: 1.875rem; }
+            .mode-section { padding: 1rem; }
+        }
+
+        /* Prevent text selection on buttons for better mobile feel */
+        button { user-select: none; }
+    </style>
+</head>
+<body class="bg-white text-black min-h-screen flex flex-col" id="app-body">
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <div class="bg-black w-20 h-20 rounded-full flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+        </div>
+        <div class="text-red-600 font-black text-xl mb-6">7EMPIRES DRC</div>
+        <div class="loader-ring"></div>
+    </div>
+
+    <div class="bg-red-600 text-white text-center py-1.5 text-[10px] font-bold tracking-widest uppercase">7EMPIRES DRC - OPTIMIZED MOBILE EXPERIENCE</div>
+    
+    <!-- Navigation -->
+    <nav class="max-w-5xl mx-auto w-full px-4 pt-6 flex justify-center sticky top-0 z-50 bg-white/80 backdrop-blur-md">
+        <div class="flex bg-slate-100 p-1 rounded-2xl border border-slate-200 w-full md:w-auto overflow-x-auto no-scrollbar">
+            <button onclick="setMode('tutor')" id="btn-tutor" class="nav-btn flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold transition-all bg-white text-red-600 shadow-sm whitespace-nowrap">
+                <i data-lucide="book-open" class="w-4 h-4"></i> TUTOR
+            </button>
+            <button onclick="setMode('imagelab')" id="btn-imagelab" class="nav-btn flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold transition-all text-slate-500 hover:text-slate-700 whitespace-nowrap">
+                <i data-lucide="image" class="w-4 h-4"></i> LAB
+            </button>
+            <button onclick="setMode('deepthink')" id="btn-deepthink" class="nav-btn flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold transition-all text-slate-500 hover:text-slate-700 whitespace-nowrap">
+                <i data-lucide="brain" class="w-4 h-4"></i> THINK
+            </button>
+        </div>
+    </nav>
+
+    <header class="max-w-5xl mx-auto px-6 py-8 md:py-12 flex flex-col items-center text-center">
+        <div class="bg-black w-20 h-20 md:w-24 md:h-24 rounded-full shadow-xl mb-4 flex items-center justify-center border-4 border-white overflow-hidden">
+            <i data-lucide="book-open" class="w-10 h-10 md:w-12 md:h-12 text-white"></i>
+        </div>
+        <div class="text-red-600 font-black text-xl md:text-2xl tracking-tighter mb-2">7EMPIRES DRC</div>
+        <h1 id="header-title" class="text-3xl md:text-5xl font-bold tracking-tight mb-3">EXHAUSTIVE TUTOR</h1>
+        <p id="header-desc" class="text-base md:text-lg text-slate-500 max-w-2xl px-4">Transform your syllabus or photos into a detailed chapter-by-chapter study guide.</p>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 md:px-6 pb-24 w-full flex-grow">
+        <!-- Tutor Mode -->
+        <div id="mode-tutor" class="mode-section">
+            <div id="tutor-idle" class="bg-white rounded-3xl border border-slate-200 p-8 md:p-12 flex flex-col items-center justify-center shadow-sm">
+                <div class="flex gap-2 mb-8 p-1 bg-slate-50 rounded-xl border border-slate-200">
+                    <button onclick="setLang('English')" id="lang-en" class="px-4 py-2 rounded-lg text-sm font-bold transition-all bg-black text-white shadow-sm">EN</button>
+                    <button onclick="setLang('French')" id="lang-fr" class="px-4 py-2 rounded-lg text-sm font-bold transition-all text-slate-500 hover:text-slate-700">FR</button>
+                </div>
+                <div class="bg-red-50 p-5 rounded-full mb-6 border-2 border-dashed border-red-200">
+                    <i data-lucide="upload" class="w-10 h-10 text-red-400"></i>
+                </div>
+                <h3 class="text-lg md:text-xl font-bold mb-2">Upload Course Material</h3>
+                <p class="text-slate-500 mb-8 text-center text-sm md:text-base">PDF, Word, PPTX, or Photos.</p>
+                <label class="w-full md:w-auto bg-red-600 hover:bg-red-700 text-white px-10 py-4 rounded-2xl font-bold transition-all cursor-pointer shadow-md active:scale-95 flex items-center justify-center gap-2">
+                    <i data-lucide="plus" class="w-5 h-5"></i> Select File
+                    <input type="file" id="tutor-file" class="hidden" onchange="handleTutorUpload(event)">
+                </label>
+            </div>
+        </div>
+
+        <!-- Image Lab Mode -->
+        <div id="mode-imagelab" class="mode-section hidden">
+            <div class="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm space-y-6">
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="setLabAction('generate')" id="lab-gen" class="lab-btn flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold transition-all bg-black text-white text-sm">Generate</button>
+                    <button onclick="setLabAction('edit')" id="lab-edit" class="lab-btn flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold transition-all bg-slate-100 text-slate-600 text-sm">Edit</button>
+                    <button onclick="setLabAction('analyze')" id="lab-analyze" class="lab-btn flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold transition-all bg-slate-100 text-slate-600 text-sm">Analyze</button>
+                </div>
+                <div class="space-y-6">
+                    <div id="lab-upload-container" class="hidden flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-2xl p-6 bg-slate-50">
+                        <label class="cursor-pointer flex flex-col items-center">
+                            <i data-lucide="upload" class="w-8 h-8 text-slate-400 mb-2"></i>
+                            <span class="text-slate-500 font-bold text-sm">Upload Image</span>
+                            <input type="file" id="lab-file" class="hidden" accept="image/*">
+                        </label>
+                    </div>
+                    <div class="space-y-2">
+                        <label id="lab-prompt-label" class="text-xs font-black text-slate-400 uppercase tracking-widest">Description</label>
+                        <textarea id="lab-prompt" placeholder="Describe what you want..." class="w-full p-4 rounded-2xl border border-slate-200 outline-none min-h-[100px] text-sm md:text-base focus:border-red-500 transition-colors"></textarea>
+                    </div>
+                    <button onclick="runLab()" class="w-full bg-red-600 hover:bg-red-700 text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 shadow-lg shadow-red-100">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i> Run Action
+                    </button>
+                </div>
+            </div>
+            <div id="lab-result" class="mt-6 hidden bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex flex-col items-center">
+                <h3 class="text-lg font-bold mb-4">Result</h3>
+                <div id="lab-output-content" class="w-full"></div>
+            </div>
+        </div>
+
+        <!-- Deep Think Mode -->
+        <div id="mode-deepthink" class="mode-section hidden">
+            <div class="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm space-y-6">
+                <div class="flex items-center gap-4 mb-2">
+                    <div class="bg-red-100 p-2.5 rounded-xl"><i data-lucide="brain" class="w-6 h-6 text-red-600"></i></div>
+                    <div>
+                        <h3 class="text-xl font-bold">Deep Thinking</h3>
+                        <p class="text-slate-500 text-xs">Complex academic reasoning.</p>
+                    </div>
+                </div>
+                <textarea id="think-query" placeholder="Ask anything complex..." class="w-full p-5 rounded-2xl border border-slate-200 min-h-[150px] text-base focus:border-red-500 transition-colors"></textarea>
+                <button onclick="runThink()" class="w-full bg-black text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 shadow-xl">
+                    <i data-lucide="sparkles" class="w-6 h-6"></i> Start Analysis
+                </button>
+            </div>
+            <div id="think-result" class="mt-6 hidden bg-white rounded-3xl border border-slate-200 p-6 md:p-10 shadow-sm">
+                <div class="markdown-body" id="think-output"></div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="hidden bg-white rounded-3xl shadow-sm border border-slate-100 p-10 flex flex-col items-center text-center">
+            <div class="relative mb-6">
+                <div class="absolute inset-0 bg-red-100 rounded-full animate-ping opacity-20"></div>
+                <i data-lucide="loader-2" class="w-12 h-12 text-red-600 animate-spin relative z-10"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">AI is working...</h3>
+            <p class="text-slate-500 text-sm">Analyzing and reconstructing. Please wait.</p>
+        </div>
+
+        <!-- Result Display (Tutor) -->
+        <div id="tutor-result" class="hidden space-y-6 mt-6">
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 flex flex-col items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="bg-emerald-100 p-2 rounded-lg"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600"></i></div>
+                    <h3 class="text-lg font-bold">Complete!</h3>
+                </div>
+                <button onclick="window.location.reload()" class="text-slate-400 hover:text-black font-bold uppercase tracking-widest text-[10px]">← Start New</button>
+            </div>
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-6 md:p-10 prose prose-slate max-w-none">
+                    <div class="markdown-body" id="tutor-output"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="max-w-5xl mx-auto px-6 py-8 border-t border-slate-100 text-center text-slate-400 text-[10px] font-bold uppercase tracking-widest">
+        <p>© 2026 7EMPIRES DRC • Optimized for All Devices</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <script type="module">
+        import { GoogleGenAI, Type } from "@google/genai";
+
+        // Initialize PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        const GEMINI_API_KEY = "{{ gemini_api_key }}";
+        const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+
+        // ... existing splash logic ...
+        function hideSplash() {
+            const splash = document.getElementById('splash-screen');
+            if (splash) {
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                }, 500);
+            }
+        }
+
+        window.addEventListener('load', hideSplash);
+        setTimeout(hideSplash, 3000);
+
+        window.currentMode = 'tutor';
+        window.currentLang = 'English';
+        window.currentLabAction = 'generate';
+
+        // Helper: Extract text from PDF
+        async function extractTextFromPDF(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            let fullText = "";
+            let images = [];
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+                fullText += textContent.items.map(item => item.str).join(" ") + "\n";
+                
+                // Simple image extraction (capturing page as image if it's a photo-based PDF)
+                if (i <= 10) { // Limit to first 10 pages for performance
+                    const viewport = page.getViewport({ scale: 1.5 });
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    await page.render({ canvasContext: context, viewport: viewport }).promise;
+                    images.push(canvas.toDataURL('image/png').split(',')[1]);
+                }
+            }
+            return { text: fullText, images: images };
+        }
+
+        // Helper: Extract text from Word
+        async function extractTextFromWord(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
+            return { text: result.value, images: [] };
+        }
+
+        window.setMode = function(mode) {
+            window.currentMode = mode;
+            document.querySelectorAll('.mode-section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(`mode-${mode}`).classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('bg-white', 'text-red-600', 'shadow-sm');
+                b.classList.add('text-slate-500');
+            });
+            document.getElementById(`btn-${mode}`).classList.add('bg-white', 'text-red-600', 'shadow-sm');
+            document.getElementById(`btn-${mode}`).classList.remove('text-slate-500');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.setLang = function(lang) {
+            window.currentLang = lang;
+            document.getElementById('lang-en').classList.toggle('bg-black', lang === 'English');
+            document.getElementById('lang-en').classList.toggle('text-white', lang === 'English');
+            document.getElementById('lang-fr').classList.toggle('bg-black', lang === 'French');
+            document.getElementById('lang-fr').classList.toggle('text-white', lang === 'French');
+        };
+
+        window.setLabAction = function(action) {
+            window.currentLabAction = action;
+            document.querySelectorAll('.lab-btn').forEach(b => {
+                b.classList.remove('bg-black', 'text-white');
+                b.classList.add('bg-slate-100', 'text-slate-600');
+            });
+            document.getElementById(`lab-${action === 'generate' ? 'gen' : action}`).classList.add('bg-black', 'text-white');
+            document.getElementById('lab-upload-container').classList.toggle('hidden', action === 'generate');
+            document.getElementById('lab-prompt-label').innerText = action === 'generate' ? 'What should I create?' : action === 'edit' ? 'What changes should I make?' : 'What to analyze?';
+        };
+
+        window.handleTutorUpload = async function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            document.getElementById('tutor-idle').classList.add('hidden');
+            document.getElementById('loading').classList.remove('hidden');
+
+            try {
+                let extractedData = { text: "", images: [] };
+
+                if (file.type === "application/pdf") {
+                    extractedData = await extractTextFromPDF(file);
+                } else if (file.type.includes("word") || file.name.endsWith(".docx")) {
+                    extractedData = await extractTextFromWord(file);
+                } else if (file.type.startsWith("image/")) {
+                    const reader = new FileReader();
+                    const base64 = await new Promise(r => {
+                        reader.onload = () => r(reader.result.split(',')[1]);
+                        reader.readAsDataURL(file);
+                    });
+                    extractedData.images = [base64];
+                } else {
+                    // Fallback for plain text
+                    extractedData.text = await file.text();
+                }
+
+                // 2. Call Gemini in frontend
+                const model = "gemini-3-flash-preview";
+                const instruction = `You are an expert tutor and academic reconstructor. Your mission is to transform the provided course material into an EXHAUSTIVE, high-density study guide that covers the material in its absolute ENTIRETY, from the first page to the last.
+
+CRITICAL PEDAGOGICAL REQUIREMENTS:
+1. LINE-BY-LINE ANALYSIS: You must go slower and analyze the document line by line. Do not skip ANY information. Every sentence, every definition, every minor point is a potential question.
+2. MAXIMUM DENSITY: For a typical chapter (e.g., 10-15 pages), I expect a MASSIVE volume of content (30-50+ questions). Do not choose what is "worthy"; EVERYTHING is worthy. If it is in the file, it must be in the guide.
+3. NO SUMMARIZATION: Your objective is NOT to synthesize or summarize. You are a teacher reconstructing the entire syllabus into a Q&A format.
+4. DEEP EXPLANATIONS (THE "WHY"): For every Question (Q:) and Answer (A:), explain the logic and reasoning. "It works like this... because of this... that is why we apply this step."
+5. MANDATORY EXERCISES: Provide a MINIMUM OF FIVE (5) practical exercises per chapter. For technical subjects (Math, Physics, Chemistry), include detailed step-by-step worked examples.
+6. IMAGE ANALYSIS: If images/photos are provided, you MUST analyze them. Create specific questions and answers based on the visual content (diagrams, charts, photos, formulas in images). Describe the image briefly in the answer if it helps the explanation.
+7. SYMBOL PRECISION: Use standard LaTeX ($...$ for inline, $$...$$ for blocks) for all mathematical, physical, and chemical symbols. 
+8. VERIFICATION: Use Google Search to verify any external constants or complex identities.
+
+STRUCTURE & FORMAT:
+- Organize by '## Chapter X: [Title]'.
+- Use 'Q:' and 'A:' for the core content.
+- Use '### Exercises' for the practice section.
+- Use bold for questions and exercise prompts.
+- LANGUAGE: All content MUST be written in ${window.currentLang}.
+
+Your goal is to ensure that a student who reads this guide has missed NOTHING from the original syllabus. Go deep, go slow, and be exhaustive.`;
+
+                const parts = [{ text: instruction }];
+                if (extractedData.text) {
+                    parts.push({ text: `\n\nCOURSE TEXT CONTENT:\n${extractedData.text.substring(0, 500000)}` });
+                }
+                
+                // Add images
+                extractedData.images.slice(0, 15).forEach((imgData, i) => {
+                    parts.push({
+                        inlineData: {
+                            data: imgData,
+                            mimeType: "image/png"
+                        }
+                    });
+                    parts.push({ text: `\n[Visual Content ${i+1} from document]` });
+                });
+
+                const result = await ai.models.generateContent({
+                    model: model,
+                    contents: { parts: parts },
+                    config: { tools: [{ googleSearch: {} }] }
+                });
+
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('tutor-result').classList.remove('hidden');
+                document.getElementById('tutor-output').innerHTML = marked.parse(result.text);
+                renderMathInElement(document.getElementById('tutor-output'), {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ]
+                });
+            } catch (e) {
+                console.error(e);
+                alert("Error processing file: " + e.message);
+                window.location.reload();
+            }
+        };
+
+        window.runLab = async function() {
+            const prompt = document.getElementById('lab-prompt').value;
+            const file = document.getElementById('lab-file').files[0];
+            if (!prompt) return;
+
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('lab-result').classList.add('hidden');
+
+            try {
+                let resultText = "";
+                let resultImage = "";
+
+                if (window.currentLabAction === 'generate') {
+                    const response = await ai.models.generateContent({
+                        model: "gemini-3.1-flash-image-preview",
+                        contents: { parts: [{ text: prompt }] },
+                        config: { 
+                            imageConfig: { aspectRatio: "1:1", imageSize: "1K" },
+                            tools: [{ googleSearch: { searchTypes: { webSearch: {}, imageSearch: {} } } }]
+                        }
+                    });
+                    for (const part of response.candidates[0].content.parts) {
+                        if (part.inlineData) resultImage = `data:image/png;base64,${part.inlineData.data}`;
+                        else if (part.text) resultText += part.text;
+                    }
+                } else if (window.currentLabAction === 'edit' && file) {
+                    const reader = new FileReader();
+                    const base64Data = await new Promise((resolve) => {
+                        reader.onload = () => resolve(reader.result.split(',')[1]);
+                        reader.readAsDataURL(file);
+                    });
+                    const response = await ai.models.generateContent({
+                        model: "gemini-2.5-flash-image",
+                        contents: { parts: [
+                            { inlineData: { data: base64Data, mimeType: file.type } },
+                            { text: prompt }
+                        ]}
+                    });
+                    for (const part of response.candidates[0].content.parts) {
+                        if (part.inlineData) resultImage = `data:image/png;base64,${part.inlineData.data}`;
+                        else if (part.text) resultText += part.text;
+                    }
+                } else if (window.currentLabAction === 'analyze' && file) {
+                    const reader = new FileReader();
+                    const base64Data = await new Promise((resolve) => {
+                        reader.onload = () => resolve(reader.result.split(',')[1]);
+                        reader.readAsDataURL(file);
+                    });
+                    const response = await ai.models.generateContent({
+                        model: "gemini-3.1-pro-preview",
+                        contents: { parts: [
+                            { inlineData: { data: base64Data, mimeType: file.type } },
+                            { text: prompt }
+                        ]},
+                        config: { tools: [{ googleSearch: {} }] }
+                    });
+                    resultText = response.text;
+                }
+
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('lab-result').classList.remove('hidden');
+                const output = document.getElementById('lab-output-content');
+                output.innerHTML = '';
+                if (resultImage) {
+                    const img = document.createElement('img');
+                    img.src = resultImage;
+                    img.className = 'rounded-2xl shadow-2xl max-w-full mx-auto border-4 border-white';
+                    output.appendChild(img);
+                }
+                if (resultText) {
+                    const div = document.createElement('div');
+                    div.className = 'prose prose-slate max-w-none text-sm md:text-base mt-4';
+                    div.innerHTML = marked.parse(resultText);
+                    output.appendChild(div);
+                }
+            } catch (e) {
+                alert("Error: " + e.message);
+                document.getElementById('loading').classList.add('hidden');
+            }
+        };
+
+        window.runThink = async function() {
+            const query = document.getElementById('think-query').value;
+            if (!query) return;
+
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('think-result').classList.add('hidden');
+
+            try {
+                const response = await ai.models.generateContent({
+                    model: "gemini-3.1-pro-preview",
+                    contents: { parts: [{ text: query }] },
+                    config: { 
+                        thinkingConfig: { thinkingLevel: "HIGH" },
+                        tools: [{ googleSearch: {} }]
+                    }
+                });
+                
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('think-result').classList.remove('hidden');
+                document.getElementById('think-output').innerHTML = marked.parse(response.text);
+                renderMathInElement(document.getElementById('think-output'), {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ]
+                });
+            } catch (e) {
+                alert("Error: " + e.message);
+                document.getElementById('loading').classList.add('hidden');
+            }
+        };
+
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('SW registered', reg))
+                    .catch(err => console.log('SW registration failed', err));
+            });
+        }
+    </script>
+</body>
+</html>

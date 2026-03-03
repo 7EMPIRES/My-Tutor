@@ -1,0 +1,23 @@
+{
+  "name": "7EMPIRES DRC EXHAUSTIVE TUTOR",
+  "short_name": "7EMPIRES",
+  "description": "Exhaustive AI Tutor, Deep Think, and Image Lab by 7EMPIRES DRC",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#dc2626",
+  "icons": [
+    {
+      "src": "https://picsum.photos/seed/7empires/192/192",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://picsum.photos/seed/7empires/512/512",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

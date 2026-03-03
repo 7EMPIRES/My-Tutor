@@ -1,0 +1,10 @@
+{
+  "appId": "com.sevenempires.drc.tutor",
+  "appName": "7EMPIRES DRC Tutor",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "https://ais-dev-epgk77pkyagnlfj745sxbb-63844582697.europe-west1.run.app",
+    "cleartext": true
+  }
+}

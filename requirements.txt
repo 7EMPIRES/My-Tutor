@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+python-multipart
+google-generativeai
+python-docx
+python-pptx
+pypdf
+pymupdf
+jinja2
+python-dotenv
+pillow
+markdown
+pyinstaller
